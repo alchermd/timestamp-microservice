@@ -1,10 +1,10 @@
 package main
 
 import (
+	"strconv"
 	"strings"
 	"testing"
 	"time"
-	"strconv"
 )
 
 func TestParseDateString(t *testing.T) {
@@ -47,6 +47,25 @@ func TestParseDateString(t *testing.T) {
 
 		if !strings.Contains(strconv.FormatInt(ts.Unix, 10), strconv.FormatInt(unixNow, 10)[:5]) {
 			t.Error("UNIX does not match")
+		}
+	})
+
+	t.Run("can parse unix timestamps", func(t *testing.T) {
+		dateString := "1451001600"
+		correctUnix := int64(1451001600)
+		correctUTC := "Fri, 25 Dec 2015 00:00:00"
+		ts, err := parseDateString(dateString)
+
+		if err != nil {
+			t.Error(err)
+		}
+
+		if ts.Unix != correctUnix {
+			t.Errorf("Incorrect UNIX timestamp, expecting %d go %d", ts.Unix, correctUnix)
+		}
+
+		if !strings.Contains(ts.UTC, correctUTC) {
+			t.Errorf("Incorrect UTC timestamp, expecting %q go %q", ts.UTC, correctUTC)
 		}
 	})
 }

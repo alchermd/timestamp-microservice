@@ -6,6 +6,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -46,18 +48,31 @@ func timestampHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func parseDateString(dateString string) (*Timestamp, error) {
+	var t time.Time
+	var err error
+
 	if dateString == "" {
 		return &Timestamp{
 			Unix: time.Now().Unix(),
-			UTC: time.Now().UTC().Format("Mon, 2 Jan 2006 15:04:05 MST"),
+			UTC:  time.Now().UTC().Format("Mon, 2 Jan 2006 15:04:05 MST"),
 		}, nil
 	}
 
+	if !strings.Contains(dateString, "-") {
+		var i int64
+		i, err = strconv.ParseInt(dateString, 10, 64)
 
-	t, err := time.Parse("2006-01-02", dateString)
+		if err != nil {
+			return nil, err
+		}
 
-	if err != nil {
-		return nil, err
+		t = time.Unix(i, 0)
+	} else {
+		t, err = time.Parse("2006-01-02", dateString)
+
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	ts := &Timestamp{
