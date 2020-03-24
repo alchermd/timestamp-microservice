@@ -25,7 +25,7 @@ func TestParseDateString(t *testing.T) {
 			t.Error(err)
 		}
 
-		if ts.Unix !=  correctUnix{
+		if ts.Unix != correctUnix {
 			t.Errorf("Incorrect UNIX timestamp, expecting %d go %d", ts.Unix, correctUnix)
 		}
 
