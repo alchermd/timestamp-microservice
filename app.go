@@ -32,7 +32,8 @@ func timestampHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	t, err := time.Parse("2006-01-02", dateString)
+
+	ts, err := parseDateString(dateString)
 
 	if err != nil {
 		j, _ := json.Marshal(&Message{Message: "Invalid Date"})
@@ -40,13 +41,23 @@ func timestampHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ts := &Timestamp{
-		Unix: t.Unix(),
-		UTC:  t.UTC().String(),
-	}
-
 	j, _ := json.Marshal(ts)
 	fmt.Fprint(w, string(j))
+}
+
+func parseDateString(dateString string) (*Timestamp, error) {
+	t, err := time.Parse("2006-01-02", dateString)
+
+	if err != nil {
+		return nil, err
+	}
+
+	ts := &Timestamp{
+		Unix: t.Unix(),
+		UTC:  t.UTC().Format("Mon, 2 Jan 2006 15:04:05 MST"),
+	}
+
+	return ts, nil
 }
 
 func main() {
