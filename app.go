@@ -28,10 +28,10 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func timestampHandler(w http.ResponseWriter, r *http.Request) {
-	dateString := r.URL.Path[len(API_URL+TIMESTAMP_URL):]
-
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
+
+	dateString := r.URL.Path[len(API_URL+TIMESTAMP_URL):]
 
 	ts, err := parseDateString(dateString)
 
@@ -46,6 +46,14 @@ func timestampHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func parseDateString(dateString string) (*Timestamp, error) {
+	if dateString == "" {
+		return &Timestamp{
+			Unix: time.Now().Unix(),
+			UTC: time.Now().UTC().Format("Mon, 2 Jan 2006 15:04:05 MST"),
+		}, nil
+	}
+
+
 	t, err := time.Parse("2006-01-02", dateString)
 
 	if err != nil {

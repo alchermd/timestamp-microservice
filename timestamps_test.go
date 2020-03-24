@@ -3,6 +3,8 @@ package main
 import (
 	"strings"
 	"testing"
+	"time"
+	"strconv"
 )
 
 func TestParseDateString(t *testing.T) {
@@ -31,6 +33,20 @@ func TestParseDateString(t *testing.T) {
 
 		if !strings.Contains(ts.UTC, correctUTC) {
 			t.Errorf("Incorrect UTC timestamp, expecting %q go %q", ts.UTC, correctUTC)
+		}
+	})
+
+	t.Run("returns current timestamp if empty string is provided", func(t *testing.T) {
+		ts, _ := parseDateString("")
+		utcNow := time.Now().UTC().Format("Mon, 2 Jan 2006 15:04:05 MST")
+		unixNow := time.Now().Unix()
+
+		if !strings.Contains(ts.UTC, utcNow[:20]) {
+			t.Error("UTC does not match")
+		}
+
+		if !strings.Contains(strconv.FormatInt(ts.Unix, 10), strconv.FormatInt(unixNow, 10)[:5]) {
+			t.Error("UNIX does not match")
 		}
 	})
 }
