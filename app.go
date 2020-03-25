@@ -21,8 +21,8 @@ type Timestamp struct {
 	UTC  string `json:"utc"`
 }
 
-type Message struct {
-	Message string `json:"message"`
+type ErrorMessage struct {
+	ErrorMessage string `json:"error"`
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
@@ -40,7 +40,7 @@ func timestampHandler(w http.ResponseWriter, r *http.Request) {
 	ts, err := parseDateString(dateString)
 
 	if err != nil {
-		j, _ := json.Marshal(&Message{Message: "Invalid Date"})
+		j, _ := json.Marshal(&ErrorMessage{ErrorMessage: "Invalid Date"})
 		fmt.Fprint(w, string(j))
 		return
 	}
