@@ -54,7 +54,7 @@ func parseDateString(dateString string) (*Timestamp, error) {
 
 	if dateString == "" {
 		return &Timestamp{
-			Unix: time.Now().Unix(),
+			Unix: time.Now().UnixNano() / int64(time.Millisecond),
 			UTC:  time.Now().UTC().Format("Mon, 2 Jan 2006 15:04:05 GMT"),
 		}, nil
 	}
