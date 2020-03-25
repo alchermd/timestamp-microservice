@@ -67,7 +67,7 @@ func parseDateString(dateString string) (*Timestamp, error) {
 			return nil, err
 		}
 
-		t = time.Unix(i, 0)
+		t = time.Unix(0, i*int64(time.Millisecond))
 	} else {
 		t, err = time.Parse("2006-01-02", dateString)
 
@@ -77,7 +77,7 @@ func parseDateString(dateString string) (*Timestamp, error) {
 	}
 
 	ts := &Timestamp{
-		Unix: t.Unix(),
+		Unix: t.UnixNano() / int64(time.Millisecond),
 		UTC:  t.UTC().Format("Mon, 2 Jan 2006 15:04:05 MST"),
 	}
 

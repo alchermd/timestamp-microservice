@@ -19,7 +19,7 @@ func TestParseDateString(t *testing.T) {
 
 	t.Run("correct unix and UTC time", func(t *testing.T) {
 		dateString := "2015-12-25"
-		correctUnix := int64(1451001600)
+		correctUnix := int64(1451001600000)
 		correctUTC := "Fri, 25 Dec 2015 00:00:00"
 		ts, err := parseDateString(dateString)
 
@@ -51,9 +51,9 @@ func TestParseDateString(t *testing.T) {
 	})
 
 	t.Run("can parse unix timestamps", func(t *testing.T) {
-		dateString := "1451001600"
-		correctUnix := int64(1451001600)
-		correctUTC := "Fri, 25 Dec 2015 00:00:00"
+		dateString := "1450137600000"
+		correctUnix := int64(1450137600000)
+		correctUTC := "Tue, 15 Dec 2015 00:00:00"
 		ts, err := parseDateString(dateString)
 
 		if err != nil {
@@ -61,11 +61,11 @@ func TestParseDateString(t *testing.T) {
 		}
 
 		if ts.Unix != correctUnix {
-			t.Errorf("Incorrect UNIX timestamp, expecting %d go %d", ts.Unix, correctUnix)
+			t.Errorf("Incorrect UNIX timestamp, expecting %d got %d", ts.Unix, correctUnix)
 		}
 
 		if !strings.Contains(ts.UTC, correctUTC) {
-			t.Errorf("Incorrect UTC timestamp, expecting %q go %q", ts.UTC, correctUTC)
+			t.Errorf("Incorrect UTC timestamp, expecting %q got %q", ts.UTC, correctUTC)
 		}
 	})
 }
