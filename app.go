@@ -32,6 +32,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 func timestampHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "application/json")
+	w.Header().Add("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
 
 	dateString := r.URL.Path[len(API_URL+TIMESTAMP_URL):]
